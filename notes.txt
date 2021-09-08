@@ -63,3 +63,99 @@ SELECT *
 FROM "Customer"
 WHERE EXTRACT(ONTH FROM "Birthdate") = 1; returns data with birthdate in january
 
+macaddr - mac address data types
+
+Each schema can only have unique table names
+
+
+Creating constraints--under tables--under table name-- select constraints-- select new object--new check-- create name for constraint----create definition(i.e. "Age">=0(column name))--select ok
+you can not create a constraint if values in your table are already violating that constraint
+
+
+Creating not null constraint
+
+ALTER TABLE "SCHEMANAME"."TABLENAME" ALTER COLUMN "COLUMNNAME"SET NOT NULL;
+
+Adding a unique contsraint 
+
+ADD CONSTRAINT "UniqueID" UNIQUE ("ID");
+ADD CONSTRAINT "nameofconstraint" UNIQUE ("column");
+
+Postgres will not enforce use of primary key in every table
+
+Adding a primary key
+
+ALTER TABLE "SCHEMANAME"."TABLENAME" ADD PRIMARY KEY ("COLUMNNAME");
+
+Adding a foreign key
+
+ALTER TABLE "SCHEMA"."TABLE"
+ADD CONSTRAINT "NAMEOFCONSTRAINT"
+FOREIGN KEY ("EMPLOYEEIDCOLUMN")
+REFERENCES"SCHAME"."TABLENAME"("COLUMNID") MATCH FULL;
+
+
+last_update timestamp wihtout time zone NOT NULLDEFAULT now();
+
+inserting values from one table to another
+
+INSERT INTO actornew(actor_id, first_name, last_name, last_update)
+SELECT actor_id, first_name, last_name, last_update
+FROM actor
+WHERE actor_id >4; inserts all actors from the actor table with listed values who have n id greater than 4 into the new actor table
+
+getting film count of actor based off of actor id and films associated with using aggregate Function
+SELECT a.actor_id,count(title) FilmCount,
+FROM Actor a
+...inner joins
+group by a.actor_id
+
+Pushing these counts to the actornew table
+
+
+UPDATE actornew
+SET "FilmCount" =(
+SELECTcount(title) FilmCount,  //removing a.actor_id,
+FROM Actor a
+...inner joins
+WHERE a.actor_id = actornew.actor_id //setting to right actor
+group by a.actor_id
+);
+
+
+adding last time update by invking and selecting which row to update and how in previous query as follows
+
+UPDATE actornew
+SET "FilmCount" =(
+SELECTcount(title) FilmCount,  //removing a.actor_id,
+FROM Actor a
+...inner joins
+WHERE a.actor_id = actornew.actor_id //setting to right actor
+group by a.actor_id
+last_update = now()
+);
+
+updating tables to exclude and include separate qualities
+
+
+Remove rows with actor_id>40
+&&
+keep rows with film count >30]
+move rows with film count <= 30]
+  
+
+
+  Before removing data do a select statement to confirm the resulting data is within the constraints
+
+SELECT * FROM actornew
+WHERE "actor_id" > 40 AND "FilmCount"<=30
+ORDER BY actor_id;
+
+
+Now convert to delete statment -delete does now support order by and change select to delete
+
+DELETE * FROM actornew
+WHERE "actor_id" > 40 AND "FilmCount"<=30;
+
+always specify a where statement when runnign a delete command or you will risk deleting all your data
+
