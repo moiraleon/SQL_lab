@@ -1,1 +1,55 @@
-Select(*)FROM table; (counts rows)
+Select(*)FROM table_name; (counts rows regardless of null values)
+
+Aggregate Function
+SELECT count(column_name) FROM table_name; (count only works for rows that are not null)
+or sub for count (max, min, avg, sum -- only work for number types)
+
+SELECT genre,sum(cost)
+FROM movies
+GROUP BY genre;
+
+HAVING count(*) >1;
+WHERE cost >= 100000;
+
+
+NOT NULL 
+UNIQUE constraints
+PRIMARY KEY makes not null and unique - can only be used once in a table
+
+movie_id int REFERENCES movies(id); or without id
+
+CHECK constraint
+
+durationint CHECK( duration>0)
+
+CREATE TABLE Actors (
+  id int PRIMARY KEY,
+  name varchar(50) NOT NULL UNIQUE,
+  country_id int,
+  FOREIGN KEY (country_id) REFERENCES Countries(id)
+);
+
+1 --- * one to many
+* --- * many to many
+1 --- 1 one to one
+
+SELECT Movies.title, Rooms.id, Rooms.seats FROM Movies
+INNER JOIN Rooms
+ON Movies.id = Rooms.movie_id
+WHERE Rooms.seats > 75
+ORDER BY Rooms.seats DESC;
+
+aliases with two words for columns ""
+
+Movies m
+
+Select movie_id from Rooms where seats >75
+Select movie_id from Rooms where seats >75
+
+select id from Rooms where seats >(select avg(seats)from Rooms);
+
+SELECT r.id, m.title
+FROM rooms r
+LEFT OUTER JOIN movies m
+ON r.movie_id = m.id
+WHERE seats > (SELECT AVG(seats) FROM rooms);
