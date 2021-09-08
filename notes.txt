@@ -59,4 +59,7 @@ SELECT *
 FROM "Customer"
 WHERE "Zipcode" LIKE '%0'; finds zipcodes starting with 0
 
+SELECT * 
+FROM "Customer"
+WHERE EXTRACT(ONTH FROM "Birthdate") = 1; returns data with birthdate in january
 
